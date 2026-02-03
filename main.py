@@ -41,31 +41,43 @@ class CodeEditorApp(ctk.CTk):
         """
         Receives the key event, sends it to the engine, and updates the UI.
         """
-        # A. Filter out special keys for now (Shift, Ctrl, Alt, etc.)
-        # If event.char is empty, it's a modifier key.
-        print(f"Key pressed: '{event.char}'")
-        if event.char == "": 
-            return
+        # DEBUG: See what is happening
+        print(f"Key sym: {event.keysym}, Char: '{event.char}'")
 
-        # B. Handle Backspace (Tkinter sends \x08 for backspace)
-        # We haven't implemented delete yet, so we ignore it or print a warning
-        # B. Handle Backspace
+        # 1. Handle Backspace
         if event.keysym == "BackSpace":
-            self.engine.delete_char()  # <--- CALL THE NEW FUNCTION
-            self.redraw()              # <--- Update screen immediately
+            self.engine.delete_char()
+            self.redraw()
             return
             
-        # C. Handle Return (Enter)
+        # 2. Handle Return (Enter)
         if event.keysym == "Return":
             self.engine.insert_char("\n")
+            self.redraw()
+            return
+
+        # 3. Handle Left Arrow (MUST BE BEFORE empty char check)
+        if event.keysym == "Left":
+            new_pos = self.engine.cursor_pos - 1
+            self.engine.set_cursor(new_pos)
+            self.redraw()
+            return
+
+        # 4. Handle Right Arrow (MUST BE BEFORE empty char check)
+        if event.keysym == "Right":
+            new_pos = self.engine.cursor_pos + 1
+            self.engine.set_cursor(new_pos)
+            self.redraw()
+            return
+
+        # 5. NOW we can safely ignore modifiers (Shift, Ctrl, Alt)
+        if event.char == "": 
+            return
         
-        # D. Handle Normal Characters
-        else:
-            self.engine.insert_char(event.char)
-
-        # E. Update the UI
+        # 6. Handle Normal Characters
+        self.engine.insert_char(event.char)
         self.redraw()
-
+        
     def redraw(self):
         """
         Gets the text from the engine and paints it on the label.

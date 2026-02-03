@@ -263,15 +263,15 @@ class TextEngine:
         # Filter out any None values from the prefix
         # In normal operation, prefix should not contain None, but this is
         # defensive programming to ensure we only get actual characters
-        clean_prefix = [c for c in prefix if c is not None]
+        clean_prefix = [c for c in self.buffer[:self.gap_start] if c is not None]
         
         # Filter out any None values from the suffix
         # Same defensive measure as above
-        clean_suffix = [c for c in suffix if c is not None]
+        clean_suffix = [c for c in self.buffer[self.gap_end:] if c is not None]
         
         # Combine the prefix and suffix lists, then join all characters into a string
         # The join() method concatenates all list elements with an empty string separator
-        return "".join(clean_prefix + clean_suffix)
+        return "".join(clean_prefix + ["|"] + clean_suffix)
 
     def __repr__(self):
         """
@@ -314,3 +314,7 @@ class TextEngine:
         
         # 2. (Optional) Clear the data for debugging clarity
         self.buffer[self.gap_start] = None
+
+    @property
+    def cursor_pos(self):
+        return self.gap_start
