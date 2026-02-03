@@ -318,3 +318,19 @@ class TextEngine:
     @property
     def cursor_pos(self):
         return self.gap_start
+    
+    def load_text(self, text):
+        """
+        Wipes the current buffer and loads the new text.
+        """
+        # 1. Create a new buffer big enough for the text + extra space
+        capacity = max(len(text) * 2, 100)
+        self.buffer = [None] * capacity
+        
+        # 2. Copy the text into the buffer manually
+        for i, char in enumerate(text):
+            self.buffer[i] = char
+            
+        # 3. Reset Cursor to the END of the text
+        self.gap_start = len(text)
+        self.gap_end = capacity
