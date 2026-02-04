@@ -108,8 +108,33 @@ class CodeEditorApp(ctk.CTk):
                 self.redraw()
                 return
 
-        # 1. Handle Backspace
+        # 1. Handle Backspace (Smart Selection Delete)
         if event.keysym == "BackSpace":
+            try:
+                # A. Check if user has text selected
+                # "sel.first" and "sel.last" throw an error if nothing is selected
+                start_idx = self.display_area.index("sel.first")
+                end_idx = self.display_area.index("sel.last")
+                
+                # B. If we are here, selection exists! Calculate range.
+                start_linear = self.get_linear_index(start_idx)
+                end_linear = self.get_linear_index(end_idx)
+                length = end_linear - start_linear
+                
+                # C. Move cursor to start of selection
+                self.engine.set_cursor(start_linear)
+                
+                # D. Delete the chunk
+                self.engine.delete_from_cursor(length)
+                
+                self.redraw()
+                return "break" # Stop standard event bubbling
+                
+            except Exception:
+                # No selection found? Just do normal single-char backspace.
+                pass
+            
+            # Normal Backspace
             self.engine.delete_char()
             self.redraw()
             return
@@ -330,6 +355,22 @@ class CodeEditorApp(ctk.CTk):
             
         except Exception as e:
             print(f"Click Error: {e}")
+
+    def get_linear_index(self, index_str):
+        """
+        Converts Tkinter 'Line.Col' string (e.g., '1.5') to a linear integer index.
+        """
+        line, char = map(int, index_str.split("."))
+        full_text = self.engine.get_text().replace("|", "")
+        lines = full_text.split("\n")
+        
+        linear_pos = 0
+        # Sum lengths of all previous lines
+        for i in range(line - 1):
+            if i < len(lines):
+                linear_pos += len(lines[i]) + 1 # +1 for the newline char
+        
+        return linear_pos + char
 
 
 if __name__ == "__main__":

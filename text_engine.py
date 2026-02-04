@@ -108,3 +108,28 @@ class TextEngine:
         self.gap_end = capacity
         self.undo_stack.clear()
         self.redo_stack.clear()
+
+    def delete_from_cursor(self, count):
+        """
+        Deletes 'count' characters starting from the current cursor position (Forward deletion).
+        Used for deleting selections.
+        """
+        if count <= 0:
+            return
+
+        self._snapshot()
+        self.redo_stack.clear()
+        
+        # To delete forward in a Gap Buffer, we just increase the gap_end pointer.
+        # This "swallows" the text into the gap.
+        
+        # Ensure we don't delete past the end of the file
+        max_deletable = len(self.buffer) - self.gap_end
+        count = min(count, max_deletable)
+        
+        # Clear data for debugging (optional, but cleaner)
+        for i in range(self.gap_end, self.gap_end + count):
+            self.buffer[i] = None
+            
+        # The Magic: Just move the end pointer!
+        self.gap_end += count
