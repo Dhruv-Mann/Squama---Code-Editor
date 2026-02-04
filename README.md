@@ -54,6 +54,7 @@ pip install customtkinter
 
 # 3. Run the app
 python main.py
+```
 
 
 ## 🏗️ Architecture
