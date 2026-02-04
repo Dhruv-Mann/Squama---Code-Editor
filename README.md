@@ -54,6 +54,8 @@ pip install customtkinter
 
 # 3. Run the app
 python main.py
+
+
 ## 🏗️ Architecture
 
 Squama is not just a wrapper around a text box; it is a full engineering project designed for performance.
