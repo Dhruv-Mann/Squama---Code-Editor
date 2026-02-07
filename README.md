@@ -37,7 +37,7 @@ See Squama in action (Syntax Highlighting, Undo/Redo, and Internal Execution):
 
 ### Option 1: The Easy Way (Windows Portable)
 1.  Go to the **[Releases Page](../../releases)**.
-2.  Download `Squama_v1.zip`.
+2.  Download `Squama.zip`.
 3.  Unzip the folder.
 4.  Double-click `Squama.exe`.
     * *No Python installation required.*
