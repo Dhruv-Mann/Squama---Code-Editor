@@ -10,7 +10,7 @@
 
 See Squama in action (Syntax Highlighting, Undo/Redo, and Internal Execution):
 
-[![Watch the Demo](https://img.youtube.com/vi/4tXfDIrUp0c/0.jpg)](https://youtu.be/4tXfDIrUp0c)
+[![Watch the Demo](https://img.youtube.com/vi/APWu2VSv0lA/0.jpg)](https://youtu.be/APWu2VSv0lA)
 
 > **[Click here to watch the full demo on YouTube](https://youtu.be/4tXfDIrUp0c)**
 
